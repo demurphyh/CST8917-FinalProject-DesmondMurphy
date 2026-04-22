@@ -1,5 +1,10 @@
+@hostname = localhost
+@port = 7071
+@host = http://{{hostname}}:{{port}}
+@contentType = application/json
+
 ### Test validation function
-POST http://localhost:7071/api/validate-expense
+POST {{host}}/api/ValidateExpenseLogicApp
 Content-Type: application/json
 
 {
