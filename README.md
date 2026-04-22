@@ -52,8 +52,6 @@
 
 Going with Scenario A from my understanding will always be cheaper than Scenario B. Due to Azure offering a monthly free grant for the first million requests the overall price per month would be minimal. On the other hand Logic Apps can be much more expensive and requires the service bus base fee which makes it more costly especially at only 100 expense/day.
 
-End with a recommendation (200-300 words): If a team asked you to build this for production, which approach would you choose and why? When would you choose the other instead?
-
 ## Recommendation
 
 If a team me to build this I would always choose to go with the first approach as I am much more comfortable implementing and working on it. This experience trying to setup the logic app workflow was extremely fristrating and I would avoid it as much as possible in the future until I am more comfortable with it and feel like I could actually set up a proper workflow.
