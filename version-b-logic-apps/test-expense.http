@@ -1,0 +1,57 @@
+### Variables - Replace with your actual Service Bus Namespace and SAS Token
+@namespace = CST8917-final
+@queueName = expense-requests
+@sasToken = sr=https%3A%2F%2FCST8917-final.servicebus.windows.net%2Fexpense-requests&sig=8Pgb%2BCYXMPfWnP6Jocys9gVBWOBihwplQoJzqUR3vnM%3D&se=1776812472&skn=RootManageSharedAccessKey
+@host = {{namespace}}.servicebus.windows.net
+
+### 1. Scenario 1: Valid expense under $100 (Auto-approved)
+POST https://{{host}}/{{queueName}}/messages
+Authorization: {{sasToken}}
+Content-Type: application/json
+
+{
+    "employeeName": "Alice Smith",
+    "employeeEmail": "alice@example.com",
+    "amount": 45.00,
+    "category": "meals",
+    "description": "Team lunch",
+    "managerEmail": "manager@example.com"
+}
+
+### 2. Scenario 2: Valid expense >= $100 (For Manager Approval)
+POST https://{{host}}/{{queueName}}/messages
+Authorization: {{sasToken}}
+Content-Type: application/json
+
+{
+    "employeeName": "Bob Jones",
+    "employeeEmail": "bob@example.com",
+    "amount": 1200.00,
+    "category": "equipment",
+    "description": "New Developer Laptop",
+    "managerEmail": "manager@example.com"
+}
+
+### 3. Scenario 5: Missing required fields (Validation Error)
+POST https://{{host}}/{{queueName}}/messages
+Authorization: {{sasToken}}
+Content-Type: application/json
+
+{
+    "employeeName": "Incomplete Request",
+    "amount": 50.00
+}
+
+### 4. Scenario 6: Invalid category (Validation Error)
+POST https://{{host}}/{{queueName}}/messages
+Authorization: {{sasToken}}
+Content-Type: application/json
+
+{
+    "employeeName": "Charlie Brown",
+    "employeeEmail": "charlie@example.com",
+    "amount": 25.00,
+    "category": "personal",
+    "description": "Coffee",
+    "managerEmail": "manager@example.com"
+}

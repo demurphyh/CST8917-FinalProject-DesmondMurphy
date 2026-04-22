@@ -1,0 +1,69 @@
+@hostname = localhost
+@port = 7071
+@host = http://{{hostname}}:{{port}}
+@contentType = application/json
+
+@instanceId = 21df96a760c14c3a9aa823ed956862e5
+
+###Scenario 1: Valid expense under $100 (Auto-approved)
+POST {{host}}/api/start_approval
+Content-Type: {{contentType}}
+
+{
+    "employeeName": "John Doe",
+    "employeeEmail": "john@example.com",
+    "amount": 45.50,
+    "category": "meals",
+    "description": "Lunch with client",
+    "managerEmail": "manager@example.com"
+}
+
+###Scenario 2: Valid expense >= $100
+POST {{host}}/api/start_approval
+Content-Type: {{contentType}}
+
+{
+    "employeeName": "Jane Smith",
+    "employeeEmail": "jane@example.com",
+    "amount": 250.00,
+    "category": "travel",
+    "description": "Flight to Toronto",
+    "managerEmail": "manager@example.com"
+}
+
+###Manager Approves
+POST {{host}}/api/approve/{{instanceId}}?action=Approved
+
+
+###Manager Rejects
+POST {{host}}/api/approve/{{instanceId}}?action=Rejected
+
+
+### 4. Scenario 5: Missing required fields (Validation Error)
+POST {{host}}/api/start_approval
+Content-Type: {{contentType}}
+
+{
+    "employeeName": "Bad Request",
+    "amount": 50.00
+    # Missing category and managerEmail
+}
+
+
+### 5. Scenario 6: Invalid category (Validation Error)
+POST {{host}}/api/start_approval
+Content-Type: {{contentType}}
+
+{
+    "employeeName": "John Doe",
+    "employeeEmail": "john@example.com",
+    "amount": 20.00,
+    "category": "space-travel",
+    "description": "Mars trip",
+    "managerEmail": "manager@example.com"
+}
+
+
+### 6. Check Status (Useful for Scenario 4: Escalated/Timeout)
+# Polling this URI will show if the status is "Running", "Completed", or "Escalated"
+GET {{host}}/runtime/webhooks/durabletask/instances/{{instanceId}}?code=
